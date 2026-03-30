@@ -1,29 +1,76 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <title>Job Application Tracker</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9
+        }
 
-<form method="POST">
-    <input name="job_title" placeholder="Job Title">
-    <input name="company" placeholder="Company">
-    <input name="deadline" placeholder="Deadline">
-    <input name="status" placeholder="Status (e.g. Applied)">
-    <button type="submit">Add Job</button>
-</form>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
 
-<table border="1">
-    <tr>
-        <th>Job Title</th>
-        <th>Company</th>
-        <th>Deadline</th>
-        <th>Status</th>
-    </tr>
-    {% for app in applications %}
-    <tr>
-        <td>{{app[1]}}</td>
-        <td>{{app[2]}}</td>
-        <td>{{app[3]}}</td>
-        <td>{{app[4]}}</td>
-        <td>
-            <a href="/delete/{{app[0]}}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td a{
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        td a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <form method="POST">
+        <input name="job_title" placeholder="Job Title">
+        <input name="company" placeholder="Company">
+        <input name="deadline" placeholder="Deadline">
+        <input name="status" placeholder="Status (e.g. Applied)">
+        <button type="submit">Add Job</button>
+    </form>
+
+    <h2>{{total_apps}}</h2>
+    <table border="1">
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for app in applications %}
+        <tr>
+            <td>{{app[1]}}</td>
+            <td>{{app[2]}}</td>
+            <td>{{app[3]}}</td>
+            <td>{{app[4]}}</td>
+            <td>
+                <a href="/delete/{{app[0]}}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
