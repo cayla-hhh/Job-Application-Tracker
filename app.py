@@ -44,7 +44,7 @@ def home():
     else:
         conn = sqlite3.connect('job_tracker.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Applications WHERE User_ID = ?', (user_id,))
+        cursor.execute('SELECT * FROM Applications WHERE User_ID = ? ORDER BY status ASC', (user_id,))
 
         apps = cursor.fetchall()
         conn.close()
