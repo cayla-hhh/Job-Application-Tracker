@@ -26,7 +26,7 @@ cursor.execute('''
 conn.commit()
 
 cursor.execute('''
-    INSERT INTO Users (Username, Email, Password_Hash)
+    INSERT OR IGNORE INTO Users (Username, Email, Password_Hash)
     VALUES ('text_user', 'test@email.com', 'pass123')
 ''')
 conn.commit()
