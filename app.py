@@ -87,6 +87,9 @@ def edit_job(id):
         cursor.execute('SELECT * FROM Applications WHERE App_ID = ? AND User_ID = ?', (id, user_id))
         job = cursor.fetchone()
         conn.close()
+        
+        if job is None:
+            return "Acess Denied or Job Not Found"
         return render_template('edit.html', job=job)
     
     elif request.method == 'POST':
