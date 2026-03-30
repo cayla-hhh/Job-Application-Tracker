@@ -24,3 +24,12 @@ def home():
         conn.close()
         return render_template('dashboard.html', applications=apps)
 
+@app.route('/delete/<int:id>')
+def delete_job(id):
+    conn = sqlite3.connect('job_tracker.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM Applications WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('home'))
+
