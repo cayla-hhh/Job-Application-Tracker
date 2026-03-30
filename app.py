@@ -24,6 +24,12 @@ def login():
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect(url_for('login'))
+    
+
     if request.method == 'POST':
         conn = sqlite3.connect('job_tracker.db')
         cursor = conn.cursor()
@@ -31,14 +37,15 @@ def home():
         company = request.form['company']
         deadline = request.form['deadline']
         status = request.form['status']
-        cursor.execute('INSERT INTO Applications (User_ID, job_title, company, deadline, status) VALUES (?, ?, ?, ?, ?)', (1, job_title, company, deadline, status))
+        cursor.execute('INSERT INTO Applications (User_ID, job_title, company, deadline, status) VALUES (?, ?, ?, ?, ?)', (user_id, job_title, company, deadline, status))
         conn.commit()
         conn.close()
         return redirect(url_for('home'))
     else:
         conn = sqlite3.connect('job_tracker.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Applications')
+        cursor.execute('SELECT * FROM Applications WHERE User_ID = ?', (user_id,))
+
         apps = cursor.fetchall()
         conn.close()
 
@@ -47,12 +54,22 @@ def home():
 
 @app.route('/delete/<int:id>')
 def delete_job(id):
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    
     conn = sqlite3.connect('job_tracker.db')
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM Applications WHERE App_ID = ?', (id,))
+    cursor.execute('DELETE FROM Applications WHERE App_ID = ? AND User_ID = ?', (id, user_id))
     conn.commit()
     conn.close()
     return redirect(url_for('home'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
