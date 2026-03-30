@@ -1,6 +1,25 @@
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
+app.secret_key = "very_secret_key"
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        conn = sqlite3.connect('job_tracker.db')
+        cursor = conn.cursor()
+        email = request.form.get('email')
+        cursor.execute('SELECT * FROM Users WHERE Email = ?', (email,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            password = request.form.get('password')
+            if password == user[3]:
+                session['user_id'] = user[0]
+                return redirect(url_for('home'))
+            
+    return render_template('login.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
