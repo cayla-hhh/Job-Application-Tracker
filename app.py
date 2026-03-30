@@ -74,6 +74,32 @@ def delete_job(id):
     conn.close()
     return redirect(url_for('home'))
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_job(id):
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect('job_tracker.db')
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute('SELECT * FROM Applications WHERE App_ID = ? AND User_ID = ?', (id, user_id))
+        job = cursor.fetchone()
+        conn.close()
+        return render_template('edit.html', job=job)
+    
+    elif request.method == 'POST':
+        new_title = request.form['job_title']
+        new_company = request.form['company']
+        new_deadline = request.form['deadline']
+        new_status = request.form['status']
+
+        cursor.execute('UPDATE Applications SET job_title = ?, company = ?, deadline = ?, status = ? WHERE App_ID = ? AND User_ID = ?', (new_title, new_company, new_deadline, new_status, id, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('home'))
+    
 
 @app.route('/logout')
 def logout():
