@@ -17,6 +17,14 @@
     </div>
     <div class="container">
         <h2>{{total_apps}}</h2>
+        <form method="GET" action="{{ url_for('home') }}">
+            <label for="sort">Sort by:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()">
+                <option value="company" {% if request.args.get('sort') == 'company' %}selected{% endif %}>Company Name</option>
+                <option value="status" {% if request.args.get('sort') == 'status' %}selected{% endif %}>Status</option>                
+                <option value="deadline" {% if request.args.get('sort') == 'deadline' %}selected{% endif %}>Date</option>
+            </select>
+        </form>
         <table border="1">
             <tr>
                 <th>Job Title</th>

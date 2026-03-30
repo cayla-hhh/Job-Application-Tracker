@@ -42,9 +42,18 @@ def home():
         conn.close()
         return redirect(url_for('home'))
     else:
+        sort_selection = request.args.get('sort', 'deadline')
+        allowed_columns = {
+            'company': 'company',
+            'status': 'status',
+            'deadline': 'deadline'
+        }
+        column = allowed_columns.get(sort_selection, 'deadline')
+        query = f'SELECT * FROM Applications WHERE User_ID = ? ORDER BY {column} ASC'
+
         conn = sqlite3.connect('job_tracker.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Applications WHERE User_ID = ? ORDER BY status ASC', (user_id,))
+        cursor.execute(query, (user_id,))
 
         apps = cursor.fetchall()
         conn.close()
