@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 
 <form method="POST">
-    <input name="job_title">
-    <input name="company">
-    <input name="deadline">
-    <input name="status">
+    <input name="job_title" placeholder="Job Title">
+    <input name="company" placeholder="Company">
+    <input name="deadline" placeholder="Deadline">
+    <input name="status" placeholder="Status (e.g. Applied)">
     <button type="submit">Add Job</button>
 </form>
+
+<table border="1">
+    <tr>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Deadline</th>
+        <th>Status</th>
+    </tr>
+    {% for app in applications %}
+    <tr>
+        <td>{{app[1]}}</td>
+        <td>{{app[2]}}</td>
+        <td>{{app[3]}}</td>
+        <td>{{app[4]}}</td>
+    </tr>
+    {% endfor %}
+</table>
