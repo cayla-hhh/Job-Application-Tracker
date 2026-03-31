@@ -3,6 +3,27 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.secret_key = "efgjhgtrfertryhtgrf"
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        conn = sqlite3.connect('job_tracker.db')
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute ('INSERT INTO Users (Username, Email, Password_Hash) VALUES (?, ?, ?)', (username, email, password))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('login'))
+        except sqlite3.IntegrityError:
+            conn.close()
+            return "Email already exists. Try logging in."
+        
+    return render_template('register.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
