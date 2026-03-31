@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
-app.secret_key = "very_secret_key"
+app.secret_key = "efgjhgtrfertryhtgrf"
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
